@@ -1,6 +1,7 @@
 import User from "../models/User.model.js";
 import jwt from "jsonwebtoken";
 import mongoose  from "mongoose";
+import {upsertStreamUser} from "../lib/stream.js";
 
 export async  function signup(req,res){
     const {email,password,fullName}=req.body;
@@ -32,6 +33,19 @@ export async  function signup(req,res){
         password,
         profilePic:randomAvatar,
     });
+    try{
+        await upsertStreamUser({
+        id:newUser._id.toString(),
+        name:newUser.fullName,
+        image:newUser.profilePic ||"",
+    });
+    console.log(`stream user created for ${newUser.fullName}`);
+
+    }catch(error){
+        console.log("error creating stream user:",error)
+    }
+   
+
 
     const token=jwt.sign({userId:newUser._id},process.env.JWT_SECRET_KEY,{
           expiresIn:"7d"
@@ -80,5 +94,7 @@ export async function login(req,res){
     
 }
  export function logout(req,res){
-    res.send("logout route ");
+    res.clearCookie("jwt")
+    res.status(200).json({success:true,message:"logout successfully"});
+
  } 
