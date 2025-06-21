@@ -71,7 +71,7 @@ export async function login(req,res){
         if(!user) return res.status(404).json({message:"invalid credentials"});
 
         const isPasswordCorrect=await user.matchPassword(password);
-
+        if(!isPasswordCorrect ) return res.status(401).json({message:"invalid email or password"});
     }
     catch(error){
 
