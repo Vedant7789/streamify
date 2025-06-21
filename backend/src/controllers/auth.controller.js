@@ -54,11 +54,30 @@ export async  function signup(req,res){
         res.status(500).json({message:"internal server error"}); 
 
     }
+
+
 }
 
-export async function login(req,res){
-    res.send("login route");
 
+
+export async function login(req,res){
+    try{
+        const {email,password}=req.body;
+        if(!email||!password){
+            return res.status(400).json({message:"all fields are required"});
+
+        }
+        const user=await User.findOne({email});
+        if(!user) return res.status(404).json({message:"invalid credentials"});
+
+        const isPasswordCorrect=await user.matchPassword(password);
+
+    }
+    catch(error){
+
+
+    }
+    
 }
  export function logout(req,res){
     res.send("logout route ");
