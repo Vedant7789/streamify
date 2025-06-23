@@ -26,4 +26,6 @@
 
 
     }
+    console.log("Cookies:", req.cookies);
+
  }

@@ -104,6 +104,8 @@ export async function login(req,res){
     if(!req.user){
         return res.status(401).json({message:"user not authenticATED"});
     }
+     console.log('user:',req.user)
+
     const userId=req.user._id;
     const {fullName,bio,nativeLanguage,learningLanguage,location}=req.body;
 
